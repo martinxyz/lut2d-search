@@ -7,12 +7,12 @@ import imageio
 size = 64
 target_edge_count = 9
 target_brigthness = 0.4
+filter_steps = 13
 
-def binary_entropy(x):
-    return -(sc.xlogy(x, x) + sc.xlog1py(1 - x, -x)) / np.log(2)
-
-def generate_image(lut, count=13):
+def generate_image(lut, count=filter_steps):
+    # generate binary noise image
     img = np.random.randint(0, 2, (size, size), dtype='uint8')
+    # apply the lut as filter several times
     for j in range(count):
         img = lut2d.binary_lut_filter(img, lut)
     return img
@@ -31,6 +31,11 @@ def main():
     best_factor = 0.01
     population_size = 10000
 
+    # probability distribution over all (512-bit --> 1-bit) look-up tables
+    #
+    # (We don't track any dependencies/correlations; it's simply the
+    #  probability that each of the 512 inputs gives a True output.)
+    #
     probs = np.ones(2**9) * 0.5
 
     for it in range(iterations):
@@ -47,19 +52,23 @@ def main():
         luts = np.array([ind[1] for ind in population])
 
         print('best loss: %.6f' % losses[0])
+        print('mean loss was', losses.mean())
+
+        # save to disk
         with open('best-lut-it%05d.txt' % it, 'w') as f:
             np.savetxt(f, luts[0])
         img = generate_image(luts[0]).astype('uint8')
         img[img != 0] = 255
         imageio.imwrite('best-lut-it%05d.png' % it, img, compress_level=6)
 
-        print('mean loss was', losses.mean())
+        # estimate the new probability distribution from the best samples
         probs = luts[:int(population_size * best_factor), :].mean(0)
-
         print('some probs are', probs[:8])
-        print('entropy is %.6f bits' % binary_entropy(probs).sum())
+        # probs = probs.clip(0.003, 0.997)  # add a minimum amount of noise
 
-        probs = probs.clip(0.003, 0.997)
+        def binary_entropy(x):
+            return -(sc.xlogy(x, x) + sc.xlog1py(1 - x, -x)) / np.log(2)
+        print('entropy is %.6f bits' % binary_entropy(probs).sum())
 
 
 if __name__ == '__main__':
