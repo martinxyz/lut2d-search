@@ -52,14 +52,13 @@ def main():
         luts = np.array([ind[1] for ind in population])
 
         print('best loss: %.6f' % losses[0])
-        print('mean loss was', losses.mean())
+        print('mean loss: %.6f' % losses.mean())
 
         # save to disk
         with open('best-lut-it%05d.txt' % it, 'w') as f:
             np.savetxt(f, luts[0])
         img = generate_image(luts[0]).astype('uint8')
-        img[img != 0] = 255
-        imageio.imwrite('best-lut-it%05d.png' % it, img, compress_level=6)
+        imageio.imwrite('best-lut-it%05d.png' % it, img * 255, compress_level=6)
 
         # estimate the new probability distribution from the best samples
         probs = luts[:int(population_size * best_factor), :].mean(0)

@@ -21,8 +21,8 @@ This is a good use-case for the [Cross-Entropy method](https://en.wikipedia.org/
 
 In contrast to other methods (evolution strategies) the worst 99 percent are completely discarded and no statistics are tracked. In contrast to genetic algorithms individuals are not used directly, only their distribution.
 
-A target brightness and edge counts are used as loss function. Using edge count alone results in tiny well-spaced dots, which is not so interesting.
+As a loss function, a fixed target brightness and edge counts are used. Getting a nice pattern as above requires a bit of luck. About 50% of the runs generate small ugly triangles instead. Using edge count alone results in tiny well-spaced dots.
 
 The next distribution has to be made as similar as possible to the distribution of the best one percent. The [cross entropy](https://en.wikipedia.org/wiki/Cross_entropy) can be used as a measure similarity between two distributions.
 
-We model the distribution as a probability for each bit of the look-up table to be one. No dependencies or correlations are not modelled. This is very simple to re-estimate from data. Simply count how many of the best filters have a certain bit set, and use the fraction as the new probability for this bit.
+We model the distribution as a probability for each bit of the look-up table to be one. No dependencies or correlations are modelled. This distribution is very simple to estimate from data. Just count how many of the best filters have a certain bit set, and use the fraction as the new probability for this bit.
