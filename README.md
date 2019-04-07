@@ -26,3 +26,5 @@ As a loss function, a fixed target brightness and edge counts are used. Getting 
 The next distribution has to be made as similar as possible to the distribution of the best one percent. The [cross entropy](https://en.wikipedia.org/wiki/Cross_entropy) can be used as a measure similarity between two distributions.
 
 We model the distribution as a probability for each bit of the look-up table to be one. No dependencies or correlations are modelled. This distribution is very simple to estimate from data. Just count how many of the best filters have a certain bit set, and use the fraction as the new probability for this bit.
+
+(Extra: I have also tried novelty search to evolve 42 rules simultanously with the goal of maximizing diversity. To measure diversity, the first few layers of a pre-trained ResNet50 was used to create a "behaviour descriptor". You can browse [some results from that run](https://log2.ch/diversity-lut-search/), but code is not published yet, also, it's a hacky mess.)
