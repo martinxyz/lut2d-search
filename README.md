@@ -16,15 +16,15 @@ This is a good use-case for the [Cross-Entropy method](https://en.wikipedia.org/
 
 1. Sample 10'000 random filters from a probability distribution.
 2. Evaluate them using a loss function.
-3. Use the best 100 (1%) to estimate the next distribution from scratch.
+3. Use the best 1% to estimate the next distribution from scratch.
 4. Repeat.
 
-In contrast to other methods (evolution strategies) the worst 99 percent are completely discarded and no statistics are tracked. In contrast to genetic algorithms individuals are not used directly, only their distribution.
+### Details
 
-As a loss function, a fixed target brightness and edge counts are used. Getting a nice pattern as above requires a bit of luck. About 50% of the runs generate small ugly triangles instead. Using edge count alone results in tiny well-spaced dots.
+As a loss function is the the difference to a fixed target brightness and edge count. When you execute the code, note that getting a nice pattern requires a bit of luck. About 50% of the runs generate small ugly triangles instead.
 
-The next distribution has to be made as similar as possible to the distribution of the best one percent. The [cross entropy](https://en.wikipedia.org/wiki/Cross_entropy) can be used as a measure similarity between two distributions.
+The probability distribution is one value for each bit of the look-up table, tracking the probability that this bit should be one. Dependencies and correlations between the bits exist but are not modeled.
 
-We model the distribution as a probability for each bit of the look-up table to be one. No dependencies or correlations are modelled. This distribution is very simple to estimate from data. Just count how many of the best filters have a certain bit set, and use the fraction as the new probability for this bit.
+### Extra Results
 
-(Extra: I have also tried novelty search to evolve 42 rules simultanously with the goal of maximizing diversity. To measure diversity, the first few layers of a pre-trained ResNet50 was used to create a "behaviour descriptor". You can browse [some results from that run](https://log2.ch/diversity-lut-search/), but code is not published yet, also, it's a hacky mess.)
+I have also tried novelty search to evolve 42 rules simultanously with the goal of maximizing diversity. To measure diversity, the first few layers of a pre-trained ResNet50 was used to create a "behaviour descriptor". You can browse [some results from that run](https://log2.ch/diversity-lut-search/), but code is not published yet, also, it's a hacky mess.
