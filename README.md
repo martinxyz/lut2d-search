@@ -21,7 +21,7 @@ This is a good use-case for the [Cross-Entropy method](https://en.wikipedia.org/
 
 ### Details
 
-As a loss function is the the difference to a fixed target brightness and edge count. When you execute the code, note that getting a nice pattern requires a bit of luck. About 50% of the runs generate small ugly triangles instead.
+The loss function is the distance to a target brightness and edge count. When you execute the code, note that getting a nice pattern requires a bit of luck. About 50% of the runs generate small ugly triangles instead.
 
 The probability distribution is one value for each bit of the look-up table, tracking the probability that this bit should be one. Dependencies and correlations between the bits exist but are not modeled.
 
